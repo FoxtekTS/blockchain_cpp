@@ -21,10 +21,14 @@ int main() {
     boost::asio::io_context io_context;
     Node server(io_context, 8080, myBlockchain); // Port 8080 pour le premier nœud
 
-    // Pour tester la connexion à un autre nœud (remplace par l'IP du nœud distant)
+    // ✅ Connecter ce nœud au nœud distant (externe)
+    server.connectToPeer("90.126.97.57", 8080);
+
+    // ✅ Connecter ce nœud à un autre nœud du réseau local
     server.connectToPeer("192.168.1.22", 8080);
 
     io_context.run();
 
     return 0;
 }
+

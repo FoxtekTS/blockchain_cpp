@@ -1,22 +1,21 @@
 Index: 0
 Previous Hash: 0
 Data: Genesis Block
-Hash: 903da7252652b3ecad978023b153b448914931636d2f844de1e42d298bdeb4b
-Timestamp: 1742097942
+Hash: 41fda28d2a98ce5967519ad2671d66e07b4a675d50df1baea7545316f9b2bdaf
+Timestamp: 1742118548
 ---------------------------------
 Index: 1
-Previous Hash: 903da7252652b3ecad978023b153b448914931636d2f844de1e42d298bdeb4b
+Previous Hash: 41fda28d2a98ce5967519ad2671d66e07b4a675d50df1baea7545316f9b2bdaf
 Data: Transaction 1 : Alice → Bob
-Hash: 89f2cfd03e9d1c4897c2efe7835278c8a66d9dddc84a83df9568b6f95bcd
-Timestamp: 1742097942
+Hash: 722aee8a155701b6d69fa7988342fdbbae7ac51aacd6435c8430edfc5b48c7
+Timestamp: 1742118548
 ---------------------------------
 Index: 2
-Previous Hash: 89f2cfd03e9d1c4897c2efe7835278c8a66d9dddc84a83df9568b6f95bcd
+Previous Hash: 722aee8a155701b6d69fa7988342fdbbae7ac51aacd6435c8430edfc5b48c7
 Data: Transaction 2 : Bob → Charlie
-Hash: 6df9a7363b77b1a0e4b55464a0f601c9dc7469d1a3025b2d0897724137c441d
-Timestamp: 1742097942
+Hash: 5280b7c76dc7d35ba9f8b3215bd68cf98ed7e46d2b55053a4470cea1d21
+Timestamp: 1742118548
 ---------------------------------
-Connecté au pair 192.168.1.22:8080
-Format invalide reçu -> 0|0|Genesis Block|786e64f62c266863867b46fcf0afb917403e4243ab93062286bd9bbe8bce38|1742070935
-Port invalide reçu ->  Alice → Bob|829bd917c04e379332dd85cc77bbadcf2432cd1de35358fd60ebe9b46f8268|1742070935
-Port invalide reçu ->  Bob → Charlie|77eba5b1cce38e613561ff70d44f64d5cdb2f68497b75b97b7cfe2cda939ef55|1742070935
+Connecté au pair 90.126.97.57:8080
+Transaction 3 : Charlie → Eve
+Transaction 4 : Eve → Dave

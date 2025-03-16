@@ -1,7 +1,5 @@
 # 🟢 Blockchain_CPP - Réseau P2P Décentralisé avec Visualisation Matrix  
-
-![Blockchain Matrix](https://media.giphy.com/media/3o7abldj0b3rxrZUxW/giphy.gif)  
-
+ 
 ## 🔗 **Description**  
 Blockchain_CPP est une blockchain en **C++**, utilisant **Boost.Asio** pour le réseau P2P et **Flask-SocketIO** pour la synchronisation entre nœuds. Le projet permet la **création et propagation d'une blockchain** en temps réel sur un **réseau décentralisé**.  
 

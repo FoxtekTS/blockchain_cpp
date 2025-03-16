@@ -1,0 +1,23 @@
+nohup: ignoring input
+Index: 0
+Previous Hash: 0
+Data: Genesis Block
+Hash: 4c55f0acb729cebdbcb465e7e673042fc9b1432fb6fb05b916cdf2aed575a5
+Timestamp: 1742094717
+---------------------------------
+Index: 1
+Previous Hash: 4c55f0acb729cebdbcb465e7e673042fc9b1432fb6fb05b916cdf2aed575a5
+Data: Transaction 1 : Alice → Bob
+Hash: 5f391a07ae7ed659bce9c7f94990cdef7fca6384272673759a492534e74faa
+Timestamp: 1742094717
+---------------------------------
+Index: 2
+Previous Hash: 5f391a07ae7ed659bce9c7f94990cdef7fca6384272673759a492534e74faa
+Data: Transaction 2 : Bob → Charlie
+Hash: 8ae4ebaaf8141e5d1781ada319ca4b35c2c4c7b3ab267df0a0fb7949331046
+Timestamp: 1742094717
+---------------------------------
+Connecté au pair 192.168.1.22:8080
+Format invalide reçu -> 0|0|Genesis Block|786e64f62c266863867b46fcf0afb917403e4243ab93062286bd9bbe8bce38|1742070935
+Port invalide reçu ->  Alice → Bob|829bd917c04e379332dd85cc77bbadcf2432cd1de35358fd60ebe9b46f8268|1742070935
+Port invalide reçu ->  Bob → Charlie|77eba5b1cce38e613561ff70d44f64d5cdb2f68497b75b97b7cfe2cda939ef55|1742070935

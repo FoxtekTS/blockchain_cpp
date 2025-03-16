@@ -95,37 +95,50 @@ void Node::requestBlockchain(std::shared_ptr<tcp::socket> socket) {
     std::string message = "REQUEST_BLOCKCHAIN\n";
     boost::asio::write(*socket, boost::asio::buffer(message));
 
-    char buffer[4096] = {0};  // Augmente la taille du buffer pour éviter la coupure de données
+    char buffer[4096] = {0}; 
     size_t bytesRead = socket->read_some(boost::asio::buffer(buffer));
 
-    std::string receivedData(buffer, bytesRead);  // Convertir en string
-    std::cout << "🔍 Données brutes reçues:\n" << receivedData << std::endl;
+    std::string receivedData(buffer, bytesRead);
+    std::cout << "🔍 Données brutes reçues: " << receivedData << std::endl;
 
     std::istringstream iss(receivedData);
     std::string line;
     while (std::getline(iss, line)) {
         std::cout << "📜 Ligne reçue: " << line << std::endl;
-        size_t pos = line.find("|");
 
-        if (pos != std::string::npos) {
-            std::string index = line.substr(0, pos);
-            std::string rest = line.substr(pos + 1);
-            std::cout << "🧐 Index: " << index << " | Données restantes: " << rest << std::endl;
+        std::vector<std::string> tokens;
+        std::stringstream ss(line);
+        std::string token;
+        while (std::getline(ss, token, '|')) {
+            tokens.push_back(token);
+        }
 
-            // Vérifier si l'index est bien un nombre
-            try {
-                int idx = std::stoi(index);
-                std::cout << "✅ Index valide: " << idx << std::endl;
-            } catch (const std::exception& e) {
-                std::cerr << "❌ Erreur conversion index: " << e.what() << " | Ligne: " << line << std::endl;
-                continue;
-            }
+        if (tokens.size() == 5) {
+            int index = std::stoi(tokens[0]);
+            std::string prevHash = tokens[1];
+            std::string data = tokens[2];
+            std::string hash = tokens[3];
+            long timestamp = std::stol(tokens[4]);
 
+            std::cout << "✅ Bloc valide reçu -> " << data << std::endl;
         } else {
-            std::cerr << "⚠️ Ligne ignorée (format incorrect): " << line << std::endl;
+            std::cout << "⚠️ Format incorrect -> " << line << std::endl;
         }
     }
 }
 
 
 
+void Node::sendBlockchain(std::shared_ptr<tcp::socket> socket) {
+    std::string blockchainData = serializeBlockchain();
+    std::cout << "📤 Données envoyées:\n" << blockchainData << std::endl;
+    boost::asio::write(*socket, boost::asio::buffer(blockchainData));
+}
+
+std::string Node::serializeBlockchain() {
+    std::string data;
+    for (const Block& block : blockchain_.chain) {
+        data += std::to_string(block.index) + "|" + block.previousHash + "|" + block.data + "|" + block.hash + "|" + std::to_string(block.timestamp) + "\n";
+    }
+    return data;
+}

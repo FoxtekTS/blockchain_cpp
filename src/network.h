@@ -28,11 +28,11 @@ private:
     Blockchain& blockchain_;
     std::vector<std::pair<std::string, int>> knownPeers;  // Liste des pairs connus
     std::vector<std::shared_ptr<tcp::socket>> peers;  // Connexions actives
+    std::string serializeBlockchain();
 
     void startAccept();
     void sendBlockchain(std::shared_ptr<tcp::socket> socket);
     void requestBlockchain(std::shared_ptr<tcp::socket> socket);
-    std::string serializeBlockchain();
 };
 
 #endif  // NETWORK_H

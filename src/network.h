@@ -22,6 +22,7 @@ public:
     void requestPeerList(std::shared_ptr<tcp::socket> socket);
     void sharePeerList(std::shared_ptr<tcp::socket> socket);
     void addPeer(const std::string& ip, int port);
+    void gossipTransaction(const std::string& txData);
 
 private:
     tcp::acceptor acceptor_;

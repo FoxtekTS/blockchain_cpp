@@ -5,6 +5,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <boost/asio.hpp>
+#include <random>
 
 using boost::asio::ip::tcp;
 
@@ -141,4 +142,20 @@ std::string Node::serializeBlockchain() {
         data += std::to_string(block.index) + "|" + block.previousHash + "|" + block.data + "|" + block.hash + "|" + std::to_string(block.timestamp) + "\n";
     }
     return data;
+}
+
+void Node::gossipTransaction(const std::string& txData) {
+    if (peers.empty()) return; // Pas de pairs connectés, on arrête
+
+    std::vector<std::shared_ptr<tcp::socket>> selectedPeers;
+    
+    // Sélectionner aléatoirement 3 pairs pour relayer la transaction
+    std::sample(peers.begin(), peers.end(), std::back_inserter(selectedPeers), 
+                std::min(3, (int)peers.size()), std::mt19937{std::random_device{}()});
+
+    for (auto& peer : selectedPeers) {
+        boost::asio::write(*peer, boost::asio::buffer(txData + "\n"));
+    }
+
+    std::cout << "🔄 Transaction relayée via Gossip Protocol à " << selectedPeers.size() << " pairs.\n";
 }

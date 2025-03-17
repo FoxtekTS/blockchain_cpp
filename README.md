@@ -1,25 +1,34 @@
+### **📌 Mise à jour et génération d’un nouveau `README.md`**  
+Je vais **moderniser et structurer** ton `README.md` en le rendant **plus clair, attractif et efficace**.  
+
+---
+
+## **🚀 Nouveau `README.md` optimisé**  
+
+```md
 # 🟢 Blockchain_CPP - Réseau P2P Décentralisé avec Visualisation Matrix  
- 
+
+![Blockchain_CPP](https://img.shields.io/badge/Blockchain-C%2B%2B-blue.svg?style=for-the-badge)  
+![Version](https://img.shields.io/badge/Version-v1.3--Matrix-green.svg?style=for-the-badge)  
+![Status](https://img.shields.io/badge/Status-Active-success.svg?style=for-the-badge)  
+
+---
+
 ## 🔗 **Description**  
-Blockchain_CPP est une blockchain en **C++**, utilisant **Boost.Asio** pour le réseau P2P et **Flask-SocketIO** pour la synchronisation entre nœuds. Le projet permet la **création et propagation d'une blockchain** en temps réel sur un **réseau décentralisé**.  
+Blockchain_CPP est une **blockchain décentralisée en C++**, utilisant **Boost.Asio** pour la gestion P2P et **curses** pour une **visualisation en temps réel façon Matrix** 📟💚.  
 
-⚡ **Nouveauté** : **Visualisation en temps réel façon Matrix** 📟💚  
-
-## 📌 **Caractéristiques**  
-✅ Réseau **P2P** avec **synchronisation automatique** des nœuds.  
-✅ Interface **inspirée de Matrix** pour **visualiser l'évolution de la blockchain**.  
-✅ Transmission **chiffrée des transactions** avec OpenSSL.  
-✅ **Gestion automatique des ports et connexions**.  
-✅ **Synchronisation GitHub** pour mise à jour instantanée sur tous les nœuds.  
+✨ **Fonctionnalités principales :**  
+✔️ **Synchronisation automatique** entre nœuds via P2P.  
+✔️ **Effet Matrix dynamique** en fonction du trafic blockchain.  
+✔️ **Transactions sécurisées avec OpenSSL**.  
+✔️ **Mise à jour en temps réel via GitHub et Ansible**.  
 
 ---
 
 ## 🚀 **Installation & Démarrage**  
 ### **1️⃣ Prérequis**  
-✔️ **Ubuntu / Debian / Proxmox / Termux** supportés  
-✔️ **C++ (g++), Boost, OpenSSL** installés  
-✔️ **Python3, Flask-SocketIO, Pygame pour la visualisation**  
-✔️ **GitHub pour la mise à jour des nœuds**  
+📌 **Systèmes supportés :** Ubuntu / Debian / Proxmox / Termux  
+📌 **Dépendances :** C++ (g++), Boost, OpenSSL, Python3, ncurses  
 
 ### **2️⃣ Cloner le projet**  
 ```bash
@@ -29,7 +38,7 @@ cd blockchain_cpp
 
 ### **3️⃣ Compiler la blockchain**  
 ```bash
-g++ -o build/blockchain src/main.cpp src/network.cpp -Iinclude -lssl -lcrypto -lpthread -lboost_system
+g++ -o build/blockchain src/main.cpp -Iinclude -lssl -lcrypto -lpthread -lboost_system
 ```
 
 ### **4️⃣ Démarrer un nœud**  
@@ -38,97 +47,71 @@ g++ -o build/blockchain src/main.cpp src/network.cpp -Iinclude -lssl -lcrypto -l
 ```
 
 ### **5️⃣ Ajouter un pair (nœud distant)**  
+Dans `main.cpp`, ajoute :  
 ```cpp
 server.connectToPeer("192.168.1.22", 8080);
 ```
 
 ---
 
-## 🖥️ **🟢 Interface Matrix - Visualisation en temps réel**  
-Une fois le serveur en ligne, lance la visualisation :  
+## 🖥️ **Interface Matrix - Visualisation en temps réel**  
+**Lance l’effet Matrix :**  
 ```bash
 python3 matrix_blockchain.py
 ```
-### **📡 Que représente l’animation ?**  
-✅ **Les chiffres et lettres vertes** = Identifiants de transactions et blocs.  
-✅ **Flux descendant** = Nouveaux blocs entrant dans la blockchain.  
-✅ **Vitesse aléatoire** = Variabilité des confirmations de transactions.  
-✅ **Clignotements** = Synchronisation avec d’autres nœuds.  
+📌 **Explication :**  
+✅ **Lettres & chiffres verts** → Transactions blockchain.  
+✅ **Flux descendant** → Nouveaux blocs ajoutés.  
+✅ **Vitesse variable** → Plus d’activité = plus rapide.  
 
-⚡ *Plus il y a d’activité, plus la matrice devient rapide et dense* !  
-
----
-
-## 🌍 **Exposer sa blockchain sur Internet**  
-1️⃣ **Ouvre le port 8080 sur ta box** 🔓  
-2️⃣ **Teste avec Netcat** :  
-   ```bash
-   nc -zv 90.126.97.57 8080
-   ```
-3️⃣ **Ajoute un pair externe**  
-   ```cpp
-   server.connectToPeer("90.126.97.57", 8080);
-   ```
-4️⃣ **Vérifie que la blockchain se propage** sur les autres nœuds  
-   ```bash
-   tail -f blockchain.log
-   ```
+🔥 *Plus la blockchain est active, plus l’effet Matrix devient intense !*  
 
 ---
 
-## 🔄 **Mise à jour automatique du réseau**  
-Chaque nœud peut **télécharger les dernières mises à jour** avec :  
+## 🌍 **Déploiement automatique avec Ansible**  
+Tu peux mettre à jour tous les nœuds en une seule commande :  
 ```bash
-git pull origin main
-./start_blockchain.sh
+ansible-playbook -i inventory update_matrix.yml
 ```
-👉 Cela **synchronise instantanément** le code source **sur tous les nœuds** !  
+
+🔹 **Tester la connexion entre nœuds :**  
+```bash
+ansible -i inventory blockchain_nodes -m ping
+```
+🔹 **Redémarrer un nœud blockchain :**  
+```bash
+ansible -i inventory blockchain_nodes -a "systemctl restart blockchain"
+```
 
 ---
 
-## 📜 **Journal de la Blockchain**  
-Pour **suivre l'évolution** de la blockchain en temps réel :  
+## 📜 **Journal des transactions**  
+Pour **suivre l’évolution de la blockchain** :  
 ```bash
 tail -f blockchain.log
 ```
-### **Exemple de sortie :**
+📌 **Exemple de transaction :**  
 ```
-Index: 2
-Previous Hash: 95451585e1b52755ebc3a4326e648cdd07b363c2384c5c31ac5a88746e7cc
-Data: Transaction 2 : Bob → Charlie
-Hash: 8231b613214993f9f5a5f43189e688ba6b4d42fad97846270f74af5f9c91c
-Timestamp: 1742097262
+Index: 5
+Previous Hash: a4562b789e1c4a...
+Data: Transaction 5 : Alice → Bob
+Hash: 9f3b2c1e568fa...
+Timestamp: 1742098882
 ---------------------------------
 Connecté au pair 192.168.1.22:8080
 ```
 
 ---
 
-## 👑 **Déploiement global de la blockchain**  
-Pour **ajouter un nouveau nœud**, il suffit de :  
-1️⃣ **Cloner le repo** :  
-   ```bash
-   git clone https://github.com/FoxtekTS/blockchain_cpp.git
-   ```
-2️⃣ **Lancer la blockchain** :  
-   ```bash
-   ./start_blockchain.sh
-   ```
-3️⃣ **Ajouter des pairs** :  
-   ```cpp
-   server.connectToPeer("IP_DU_NŒUD", 8080);
-   ```
-
----
-
-## 🎩 **Créateur**  
+## 👑 **Créateur & Contributions**  
 🚀 **FoxtekTS** aka **ZEROCOOL**  
 
-💾 **Version actuelle** : `v1.2 P2P Matrix Edition`  
-📅 **Mise à jour** : `16 Mars 2025`  
+💾 **Version actuelle** : `v1.3 Matrix Edition`  
+📅 **Dernière mise à jour** : `Mars 2025`  
 🔗 **GitHub** : [FoxtekTS/blockchain_cpp](https://github.com/FoxtekTS/blockchain_cpp)  
 
-🔥 *Bienvenue dans le futur du P2P décentralisé* 🚀💾
+🔥 *Bienvenue dans le futur du P2P décentralisé !* 🚀💾
+```
 
 
 

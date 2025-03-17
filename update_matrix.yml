@@ -1,0 +1,7 @@
+- hosts: blockchain_nodes
+  tasks:
+    - name: Mettre à jour Matrix Blockchain
+      git:
+        repo: "https://github.com/ton-repo/blockchain_cpp.git"
+        dest: "/home/joemy/blockchain_cpp"
+        update: yes

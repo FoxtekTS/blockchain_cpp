@@ -1,63 +1,54 @@
-import os
-import sys
-import time
+import curses
 import random
-import pygame
+import time
 
-# Vérifier si le fichier blockchain.log existe
-LOG_FILE = os.path.expanduser("~/blockchain_cpp/blockchain.log")
+def matrix_effect(stdscr):
+    """ Effet Matrix fluide et stable, sans clignotement """
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)  # Vert normal
+    curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Blanc lumineux
+    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)  # Vert foncé (traînée)
 
-if not os.path.exists(LOG_FILE):
-    print(f"❌ Fichier introuvable : {LOG_FILE}")
-    sys.exit(1)
+    stdscr.nodelay(1)
+    stdscr.timeout(50)
 
-# Initialisation de Pygame
-pygame.init()
+    height, width = stdscr.getmaxyx()
+    num_columns = width // 2
+    drops = [random.randint(-height, 0) for _ in range(num_columns)]
+    trails = [[" " for _ in range(height)] for _ in range(num_columns)]
 
-# Dimensions de la fenêtre
-WIDTH, HEIGHT = 800, 600
-FONT_SIZE = 20
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Blockchain Matrix")
+    while True:
+        for i in range(num_columns):
+            x = i * 2
+            y = drops[i]
 
-# Couleurs
-BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
+            char = random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()")
 
-# Police de caractères
-font = pygame.font.Font(pygame.font.match_font('monospace'), FONT_SIZE)
+            # **Ne pas effacer l’écran !**
+            if 0 <= y < height:
+                trails[i][y] = char
+                stdscr.addstr(y, x, char, curses.color_pair(2) if random.random() > 0.98 else curses.color_pair(1))
 
-# Lire les transactions de la blockchain
-with open(LOG_FILE, "r") as f:
-    transactions = [line.strip() for line in f.readlines() if "Data:" in line]
+                # **Créer un effet de traînée fluide**
+                for j in range(1, 6):  # Longueur de la traînée
+                    if y - j >= 0:
+                        stdscr.addstr(y - j, x, trails[i][y - j], curses.color_pair(3))
 
-# Générer des colonnes de texte défilant
-columns = [random.randint(0, WIDTH // FONT_SIZE) for _ in range(len(transactions))]
-positions = [random.randint(-HEIGHT, 0) for _ in range(len(transactions))]
+            drops[i] += 1
 
-running = True
-clock = pygame.time.Clock()
+            if drops[i] >= height:
+                drops[i] = random.randint(-height // 2, 0)  # Réapparition en haut, doucement
 
-while running:
-    screen.fill(BLACK)
+        stdscr.refresh()
+        time.sleep(0.07)  # Légère pause pour lisser l'animation
 
-    for i in range(len(transactions)):
-        text_surface = font.render(transactions[i], True, GREEN)
-        x = columns[i] * FONT_SIZE
-        y = positions[i]
-        screen.blit(text_surface, (x, y))
+        key = stdscr.getch()
+        if key == ord('q'):
+            break
 
-        positions[i] += FONT_SIZE // 2  # Vitesse du défilement
+curses.wrapper(matrix_effect)
 
-        if positions[i] > HEIGHT:
-            positions[i] = random.randint(-HEIGHT, 0)
 
-    pygame.display.flip()
-    clock.tick(15)  # FPS
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
-pygame.quit()
 

@@ -1,11 +1,3 @@
-### **📌 Mise à jour et génération d’un nouveau `README.md`**  
-Je vais **moderniser et structurer** ton `README.md` en le rendant **plus clair, attractif et efficace**.  
-
----
-
-## **🚀 Nouveau `README.md` optimisé**  
-
-```md
 # 🟢 Blockchain_CPP - Réseau P2P Décentralisé avec Visualisation Matrix  
 
 ![Blockchain_CPP](https://img.shields.io/badge/Blockchain-C%2B%2B-blue.svg?style=for-the-badge)  

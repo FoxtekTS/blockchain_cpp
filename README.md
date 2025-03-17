@@ -111,7 +111,6 @@ Connecté au pair 192.168.1.22:8080
 🔗 **GitHub** : [FoxtekTS/blockchain_cpp](https://github.com/FoxtekTS/blockchain_cpp)  
 
 🔥 *Bienvenue dans le futur du P2P décentralisé !* 🚀💾
-```
 
 
 

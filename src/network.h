@@ -23,6 +23,9 @@ public:
     void sharePeerList(std::shared_ptr<tcp::socket> socket);
     void addPeer(const std::string& ip, int port);
     void gossipTransaction(const std::string& txData);
+    void setTorProxy(const std::string& proxy_ip, int proxy_port);
+    void loadPeersFromFile(const std::string& filename);
+
 
 private:
     tcp::acceptor acceptor_;

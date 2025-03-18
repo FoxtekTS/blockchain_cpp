@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <boost/asio.hpp>
 #include <random>
+#include <fstream>
 
 using boost::asio::ip::tcp;
 
@@ -66,17 +67,79 @@ void Node::requestPeerList(std::shared_ptr<tcp::socket> socket) {
     }
 }
 
-void Node::connectToPeer(std::string peer_ip, short peer_port) {
-    auto socket = std::make_shared<tcp::socket>(acceptor_.get_executor());
-    boost::system::error_code ec;
-    socket->connect(tcp::endpoint(boost::asio::ip::address::from_string(peer_ip), peer_port), ec);
+//void Node::connectToPeer(std::string peer_ip, short peer_port) {
+//    auto socket = std::make_shared<tcp::socket>(acceptor_.get_executor());
+//    boost::system::error_code ec;
+//    socket->connect(tcp::endpoint(boost::asio::ip::address::from_string(peer_ip), peer_port), ec);
     
-    if (!ec) {
-        std::cout << "Connecté au pair " << peer_ip << ":" << peer_port << std::endl;
-        peers.push_back(socket);
-        requestPeerList(socket);  // Demande la liste des pairs dès la connexion
-    } else {
-        std::cout << "Impossible de se connecter à " << peer_ip << ":" << peer_port << std::endl;
+//    if (!ec) {
+//        std::cout << "Connecté au pair " << peer_ip << ":" << peer_port << std::endl;
+//        peers.push_back(socket);
+//        requestPeerList(socket);  // Demande la liste des pairs dès la connexion
+//    } else {
+//        std::cout << "Impossible de se connecter à " << peer_ip << ":" << peer_port << std::endl;
+//    }
+//}
+
+//void Node::connectToPeer(std::string peer_onion, short peer_port) {
+//    boost::asio::ip::tcp::resolver resolver(acceptor_.get_executor());
+//    boost::asio::ip::tcp::resolver::results_type endpoints = 
+//        resolver.resolve("127.0.0.1", "9050"); // Proxy Tor SOCKS5
+
+//    auto socket = std::make_shared<boost::asio::ip::tcp::socket>(acceptor_.get_executor());
+//    boost::asio::connect(*socket, endpoints);
+
+//    boost::asio::socks5::handshake(*socket, peer_onion, peer_port);
+    
+//    peers.push_back(socket);
+//    std::cout << "✅ Connecté via Tor à " << peer_onion << ":" << peer_port << std::endl;
+//}
+
+void Node::connectToPeer(std::string peer_ip, short peer_port) {
+    try {
+        boost::asio::io_context io_context;
+        boost::asio::ip::tcp::resolver resolver(io_context);
+
+        // SOCKS5 proxy Tor (localhost:9050)
+        boost::asio::ip::tcp::resolver::query query("127.0.0.1", "9050");
+        boost::asio::ip::tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
+        boost::asio::ip::tcp::socket socket(io_context);
+        
+        // Connexion au proxy
+        boost::asio::connect(socket, endpoint_iterator);
+
+        // Envoyer la requête SOCKS5 pour se connecter au nœud
+        std::vector<uint8_t> request = {
+            0x05, 0x01, 0x00,  // SOCKS5 handshake
+            0x05, 0x01, 0x00, 0x03,  // Connect request
+            static_cast<uint8_t>(peer_ip.size())  // Taille du hostname
+        };
+
+        request.insert(request.end(), peer_ip.begin(), peer_ip.end());
+        request.push_back(static_cast<uint8_t>(peer_port >> 8));  // Port high byte
+        request.push_back(static_cast<uint8_t>(peer_port & 0xFF));  // Port low byte
+
+        boost::asio::write(socket, boost::asio::buffer(request));
+
+        std::cout << "✅ Connecté à " << peer_ip << " via Tor !" << std::endl;
+    } catch (std::exception& e) {
+        std::cerr << "❌ Erreur de connexion Tor : " << e.what() << std::endl;
+    }
+}
+
+void Node::setTorProxy(const std::string& proxy_ip, int proxy_port) {
+    for (auto& peer : peers) {
+        try {
+            boost::asio::ip::tcp::resolver resolver(peer->get_executor());
+            boost::asio::ip::tcp::resolver::query query(proxy_ip, std::to_string(proxy_port));
+
+            // Connexion au proxy SOCKS5 de Tor
+            boost::asio::connect(*peer, resolver.resolve(query));
+
+            std::cout << "✅ Tor proxy configuré : " << proxy_ip << ":" << proxy_port << std::endl;
+        } catch (std::exception& e) {
+            std::cerr << "❌ Erreur configuration Tor proxy : " << e.what() << std::endl;
+        }
     }
 }
 
@@ -159,3 +222,27 @@ void Node::gossipTransaction(const std::string& txData) {
 
     std::cout << "🔄 Transaction relayée via Gossip Protocol à " << selectedPeers.size() << " pairs.\n";
 }
+
+
+#include <fstream>
+
+void Node::loadPeersFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    std::string line;
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            if (!line.empty()) {
+                size_t pos = line.find(":");
+                if (pos != std::string::npos) {
+                    std::string peer_ip = line.substr(0, pos);
+                    short peer_port = std::stoi(line.substr(pos + 1));
+                    connectToPeer(peer_ip, peer_port);
+                }
+            }
+        }
+        file.close();
+    } else {
+        std::cerr << "❌ Impossible d'ouvrir " << filename << "\n";
+    }
+}
+

@@ -2,6 +2,7 @@
 #include "network.h"
 #include <boost/asio.hpp>
 
+
 int main() {
     Blockchain myBlockchain;
 
@@ -42,11 +43,20 @@ int main() {
     boost::asio::io_context io_context;
     Node server(io_context, 8080, myBlockchain); // Port 8080 pour le premier nœud
 
+    // ✅ Configurer Tor comme proxy SOCKS5
+    server.setTorProxy("127.0.0.1", 9050);
+
     // ✅ Connecter ce nœud au nœud distant (externe)
     server.connectToPeer("90.126.97.57", 8080);
 
     // ✅ Connecter ce nœud à un autre nœud du réseau local
     server.connectToPeer("192.168.1.22", 8080);
+
+    // ✅ Connecter ce nœud au réseau Tor
+    server.connectToPeer("xrlz4artnwwgpikjh45bmfudng64he2bzwzhblbpov3xwupytwpii2yd.onion", 8080);
+
+    server.loadPeersFromFile("peers.onion");
+
 
     io_context.run();
 

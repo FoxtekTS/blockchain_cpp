@@ -1,4 +1,8 @@
 #include "block.h"
+#include <sstream>
+#include <ctime>
+#include <openssl/evp.h>
+#include <openssl/sha.h>
 
 Block::Block(int idx, std::string prevHash, std::string blockData) {
     index = idx;

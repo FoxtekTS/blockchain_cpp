@@ -1,22 +1,37 @@
+🎉 Airdrop : Alice reçoit 100 MTX !
+🎉 Airdrop : Bob reçoit 100 MTX !
+✅ Nouveau bloc ajouté avec succès !
+✅ Nouveau bloc ajouté avec succès !
+✅ Transaction en MTX confirmée : Alice → Bob [20 MTX]
+✅ Transaction en MTX confirmée : Bob → Alice [5 MTX]
+💰 Récompense PoM : Alice gagne 0.5 MTX !
+⚠️ Pénalité : Bob a été sanctionné pour spam (-2 MTX)
 Index: 0
 Previous Hash: 0
 Data: Genesis Block
-Hash: 41fda28d2a98ce5967519ad2671d66e07b4a675d50df1baea7545316f9b2bdaf
-Timestamp: 1742118548
+Hash: 8c8e623538e4d3fac2906fd05b3717e7aa5336ca29cd573dc8eded40bf82f4a
+Timestamp: 1742369329
 ---------------------------------
 Index: 1
-Previous Hash: 41fda28d2a98ce5967519ad2671d66e07b4a675d50df1baea7545316f9b2bdaf
+Previous Hash: 8c8e623538e4d3fac2906fd05b3717e7aa5336ca29cd573dc8eded40bf82f4a
 Data: Transaction 1 : Alice → Bob
-Hash: 722aee8a155701b6d69fa7988342fdbbae7ac51aacd6435c8430edfc5b48c7
-Timestamp: 1742118548
+Hash: 71c5a43f5f35321ff33f1f1a3916376ce48b3918deefbd26267994a2df15b271
+Timestamp: 1742369329
 ---------------------------------
 Index: 2
-Previous Hash: 722aee8a155701b6d69fa7988342fdbbae7ac51aacd6435c8430edfc5b48c7
+Previous Hash: 71c5a43f5f35321ff33f1f1a3916376ce48b3918deefbd26267994a2df15b271
 Data: Transaction 2 : Bob → Charlie
-Hash: 5280b7c76dc7d35ba9f8b3215bd68cf98ed7e46d2b55053a4470cea1d21
-Timestamp: 1742118548
+Hash: 8eb7a41c21c9aeed074b5fe65f5c89b9b4bb3f4f28264f7a9dbefab6665d79
+Timestamp: 1742369329
 ---------------------------------
-Connecté au pair 90.126.97.57:8080
-Transaction 3 : Charlie → Eve
-Transaction 4 : Eve → Dave
-Transaction 3 : Charlie → Eve
+
+💰 Soldes des comptes après transactions :
+Alice : 85.5 MTX
+Bob   : 113 MTX
+✅ Connecté à 90.126.97.57 via Tor !
+✅ Connecté à 192.168.1.22 via Tor !
+✅ Connecté à xrlz4artnwwgpikjh45bmfudng64he2bzwzhblbpov3xwupytwpii2yd.onion via Tor !
+✅ Connecté à xrlz4artnwwgpikjh45bmfudng64he2bzwzhblbpov3xwupytwpii2yd.onion via Tor !
+✅ Connecté à abcd1234efgh5678ijkl90mnopqrstuv.onion via Tor !
+✅ Connecté à hgfedcba8765lkjihgf4321zyxwvutsr.onion via Tor !
+✅ Connecté à qwerty123456asdfghjklzxcvbnm0987.onion via Tor !

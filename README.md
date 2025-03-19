@@ -1,15 +1,16 @@
-# **🟢 Blockchain_CPP - Réseau P2P Décentralisé avec Économie Intégrée et Visualisation Matrix**  
+# **🟢 Blockchain_CPP - Réseau P2P Décentralisé avec API HTTP et Économie MTX**  
 
 ![Blockchain_CPP](https://img.shields.io/badge/Blockchain-C%2B%2B-blue.svg?style=for-the-badge)  
-![Version](https://img.shields.io/badge/Version-v1.4--MTX-green.svg?style=for-the-badge)  
+![Version](https://img.shields.io/badge/Version-v2.0--MTX-green.svg?style=for-the-badge)  
 ![Status](https://img.shields.io/badge/Status-Active-success.svg?style=for-the-badge)  
 
 ---
 
 ## **🔗 Description**  
-**Blockchain_CPP** est une **blockchain décentralisée en C++** qui allie **P2P, économie intégrée (MTX)** et **visualisation en temps réel façon Matrix** 📟💚.  
+**Blockchain_CPP** est une **blockchain décentralisée en C++** qui allie **P2P, API HTTP, économie intégrée (MTX)** et **visualisation en temps réel façon Matrix** 📟💚.  
 
 ✨ **Nouvelles fonctionnalités :**  
+✔️ **🌐 API RESTful HTTP :** Interaction en temps réel avec la blockchain.  
 ✔️ **💰 Système économique MTX :** Envoi sécurisé de tokens entre utilisateurs.  
 ✔️ **🟢 Proof of Matrix (PoM) :** Récompense automatique des nœuds actifs.  
 ✔️ **🛡️ Anti-Spam intégré :** Les transactions abusives sont pénalisées.  
@@ -29,20 +30,34 @@ git clone https://github.com/FoxtekTS/blockchain_cpp.git
 cd blockchain_cpp
 ```
 
-### **3️⃣ Compiler la blockchain**  
+### **3️⃣ Compiler la blockchain avec l’API HTTP**  
 ```bash
-g++ -o build/blockchain src/*.cpp -Iinclude -lssl -lcrypto -lpthread -lboost_system
+g++ -std=c++17 -o build/blockchain src/main.cpp src/block.cpp src/blockchain.cpp src/network.cpp src/transaction.cpp src/api.cpp -Iinclude -lssl -lcrypto -lboost_system -lpthread
 ```
 
-### **4️⃣ Démarrer un nœud**  
+### **4️⃣ Démarrer la blockchain et l’API HTTP**  
 ```bash
 ./build/blockchain
 ```
+🚀 **L’API HTTP démarre sur `http://localhost:8081`**  
+🚀 **Le réseau P2P tourne sur `port 8080`**  
 
-### **5️⃣ Ajouter un pair (nœud distant)**  
-Dans `main.cpp`, ajoute :  
-```cpp
-server.connectToPeer("192.168.1.22", 8080);
+---
+
+## **🌐 API HTTP - Interagir avec la Blockchain**  
+### **1️⃣ Récupérer tous les blocs**  
+```bash
+curl http://localhost:8081/blocks
+```
+
+### **2️⃣ Ajouter un nouveau bloc**  
+```bash
+curl -X POST -d "Nouvelle transaction" http://localhost:8081/add_block
+```
+
+### **3️⃣ Vérifier le solde d’un utilisateur** *(à venir...)*  
+```bash
+curl http://localhost:8081/balance/Alice
 ```
 
 ---
@@ -129,14 +144,13 @@ Connecté au pair 192.168.1.22:8080
 ## **👑 Créateur & Contributions**  
 🚀 **FoxtekTS** aka **ZEROCOOL**  
 
-💾 **Version actuelle** : `v1.4 MTX Edition`  
+💾 **Version actuelle** : `v2.0 MTX Edition`  
 📅 **Dernière mise à jour** : `Mars 2025`  
 🔗 **GitHub** : [FoxtekTS/blockchain_cpp](https://github.com/FoxtekTS/blockchain_cpp)  
 
-🔥 *Bienvenue dans le futur du P2P décentralisé !* 🚀💾  
+🔥 *Bienvenue dans le futur du P2P décentralisé avec API HTTP !* 🚀💾  
 
 ---
-
 
 
 

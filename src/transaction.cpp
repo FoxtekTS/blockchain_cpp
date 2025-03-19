@@ -6,32 +6,28 @@
 Transaction::Transaction(std::string s, std::string r, double a) 
     : sender(s), receiver(r), amount(a) {}
 
-// ✅ Nouvelle version de signTransaction (compatible OpenSSL 3.0)
 std::string Transaction::signTransaction(EC_KEY* privateKey) {
     unsigned char hash[32];
-    SHA256((unsigned char*)this->receiver.c_str(), this->receiver.size(), hash);
+    unsigned char salt[16];  // Génération de sel aléatoire
+    RAND_bytes(salt, sizeof(salt));
+
+    std::string inputData = receiver + std::string((char*)salt, sizeof(salt));
+    SHA256((unsigned char*)inputData.c_str(), inputData.size(), hash);
 
     EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
     EVP_PKEY* pkey = EVP_PKEY_new();
     EVP_PKEY_assign_EC_KEY(pkey, privateKey);
 
     if (EVP_DigestSignInit(mdctx, NULL, EVP_sha256(), NULL, pkey) <= 0) {
-        std::cerr << "Erreur lors de l'initialisation de la signature" << std::endl;
         return "";
     }
 
-    if (EVP_DigestSignUpdate(mdctx, hash, sizeof(hash)) <= 0) {
-        std::cerr << "Erreur lors de la signature" << std::endl;
-        return "";
-    }
-
+    EVP_DigestSignUpdate(mdctx, hash, sizeof(hash));
+    
     size_t sigLen;
     EVP_DigestSignFinal(mdctx, NULL, &sigLen);
     std::vector<unsigned char> sig(sigLen);
-    if (EVP_DigestSignFinal(mdctx, sig.data(), &sigLen) <= 0) {
-        std::cerr << "Erreur lors de la finalisation de la signature" << std::endl;
-        return "";
-    }
+    EVP_DigestSignFinal(mdctx, sig.data(), &sigLen);
 
     EVP_MD_CTX_free(mdctx);
     EVP_PKEY_free(pkey);

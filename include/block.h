@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ctime>
 #include <sstream>
+#include <openssl/evp.h>
 #include <openssl/sha.h>
 
 class Block {
@@ -15,29 +16,10 @@ public:
     long timestamp;
     int nonce;
 
-    Block(int idx, std::string prevHash, std::string blockData) {
-        index = idx;
-        previousHash = prevHash;
-        data = blockData;
-        timestamp = std::time(0);
-        nonce = 0;
-        hash = calculateHash();
-    }
+    Block(int idx, std::string prevHash, std::string blockData);
 
-    std::string calculateHash() {
-        std::stringstream ss;
-        ss << index << previousHash << data << timestamp << nonce;
-
-        unsigned char digest[SHA256_DIGEST_LENGTH];
-        SHA256((unsigned char*)ss.str().c_str(), ss.str().size(), digest);
-
-        std::stringstream hashStream;
-        for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
-            hashStream << std::hex << (int)digest[i];
-
-        return hashStream.str();
-    }
+    std::string calculateHash();  // ✅ Déclaration correcte (sans `Block::`)
 };
 
-#endif
+#endif  // BLOCK_H
 

@@ -67,46 +67,36 @@ void Node::requestPeerList(std::shared_ptr<tcp::socket> socket) {
     }
 }
 
-//void Node::connectToPeer(std::string peer_ip, short peer_port) {
-//    auto socket = std::make_shared<tcp::socket>(acceptor_.get_executor());
-//    boost::system::error_code ec;
-//    socket->connect(tcp::endpoint(boost::asio::ip::address::from_string(peer_ip), peer_port), ec);
-    
-//    if (!ec) {
-//        std::cout << "Connecté au pair " << peer_ip << ":" << peer_port << std::endl;
-//        peers.push_back(socket);
-//        requestPeerList(socket);  // Demande la liste des pairs dès la connexion
-//    } else {
-//        std::cout << "Impossible de se connecter à " << peer_ip << ":" << peer_port << std::endl;
-//    }
-//}
-
-//void Node::connectToPeer(std::string peer_onion, short peer_port) {
-//    boost::asio::ip::tcp::resolver resolver(acceptor_.get_executor());
-//    boost::asio::ip::tcp::resolver::results_type endpoints = 
-//        resolver.resolve("127.0.0.1", "9050"); // Proxy Tor SOCKS5
-
-//    auto socket = std::make_shared<boost::asio::ip::tcp::socket>(acceptor_.get_executor());
-//    boost::asio::connect(*socket, endpoints);
-
-//    boost::asio::socks5::handshake(*socket, peer_onion, peer_port);
-    
-//    peers.push_back(socket);
-//    std::cout << "✅ Connecté via Tor à " << peer_onion << ":" << peer_port << std::endl;
-//}
-
 void Node::connectToPeer(std::string peer_ip, short peer_port) {
     try {
         boost::asio::io_context io_context;
+        boost::asio::deadline_timer timeout(io_context, boost::posix_time::seconds(10));
+
+        // Lancer le timeout asynchrone
+        timeout.async_wait([&](const boost::system::error_code& error) {
+            if (!error) {
+                std::cerr << "⏳ Timeout : Connexion Tor échouée après 10 secondes !" << std::endl;
+                io_context.stop();
+            }
+        });
+
         boost::asio::ip::tcp::resolver resolver(io_context);
 
         // SOCKS5 proxy Tor (localhost:9050)
         boost::asio::ip::tcp::resolver::query query("127.0.0.1", "9050");
         boost::asio::ip::tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
         boost::asio::ip::tcp::socket socket(io_context);
-        
-        // Connexion au proxy
-        boost::asio::connect(socket, endpoint_iterator);
+
+        boost::system::error_code ec;
+        boost::asio::connect(socket, endpoint_iterator, ec);
+
+        if (ec) {
+            std::cerr << "❌ Erreur de connexion au proxy Tor : " << ec.message() << std::endl;
+            return;
+        }
+
+        // Annulation du timeout car la connexion est réussie
+        timeout.cancel();
 
         // Envoyer la requête SOCKS5 pour se connecter au nœud
         std::vector<uint8_t> request = {
@@ -122,6 +112,7 @@ void Node::connectToPeer(std::string peer_ip, short peer_port) {
         boost::asio::write(socket, boost::asio::buffer(request));
 
         std::cout << "✅ Connecté à " << peer_ip << " via Tor !" << std::endl;
+
     } catch (std::exception& e) {
         std::cerr << "❌ Erreur de connexion Tor : " << e.what() << std::endl;
     }
@@ -208,11 +199,10 @@ std::string Node::serializeBlockchain() {
 }
 
 void Node::gossipTransaction(const std::string& txData) {
-    if (peers.empty()) return; // Pas de pairs connectés, on arrête
+    if (peers.empty()) return; // Aucun pair connecté
 
     std::vector<std::shared_ptr<tcp::socket>> selectedPeers;
     
-    // Sélectionner aléatoirement 3 pairs pour relayer la transaction
     std::sample(peers.begin(), peers.end(), std::back_inserter(selectedPeers), 
                 std::min(3, (int)peers.size()), std::mt19937{std::random_device{}()});
 
@@ -223,8 +213,6 @@ void Node::gossipTransaction(const std::string& txData) {
     std::cout << "🔄 Transaction relayée via Gossip Protocol à " << selectedPeers.size() << " pairs.\n";
 }
 
-
-#include <fstream>
 
 void Node::loadPeersFromFile(const std::string& filename) {
     std::ifstream file(filename);
@@ -245,4 +233,6 @@ void Node::loadPeersFromFile(const std::string& filename) {
         std::cerr << "❌ Impossible d'ouvrir " << filename << "\n";
     }
 }
+
+
 

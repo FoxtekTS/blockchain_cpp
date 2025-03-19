@@ -16,12 +16,13 @@ Block Blockchain::getLatestBlock() {
 }
 
 void Blockchain::addBlock(std::string data) {
-    std::string txHash = std::to_string(std::hash<std::string>{}(data));  // ✅ Génère un hash unique
+    std::string txHash = std::to_string(std::hash<std::string>{}(data));
 
-    if (isTransactionValid(txHash)) {  // ✅ Vérifie si la transaction est nouvelle
-        Block newBlock(chain.size(), getLatestBlock().hash, data);
+    if (isTransactionValid(txHash)) {
+        std::string previousHash = chain.empty() ? "0" : getLatestBlock().hash; // ✅ Vérification
+        Block newBlock(chain.size(), previousHash, data);
         chain.push_back(newBlock);
-        addTransactionToCache(txHash);  // ✅ Ajoute au cache
+        addTransactionToCache(txHash);
         std::cout << "✅ Nouveau bloc ajouté avec succès !\n";
     } else {
         std::cout << "❌ Transaction déjà validée, rejetée.\n";

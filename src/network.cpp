@@ -7,6 +7,8 @@
 #include <boost/asio.hpp>
 #include <random>
 #include <fstream>
+#include <algorithm> // for std::all_of
+#include <cctype>    // for ::isdigit
 
 using boost::asio::ip::tcp;
 
@@ -111,8 +113,11 @@ void Node::connectToPeer(std::string peer_ip, short peer_port) {
 
         boost::asio::write(socket, boost::asio::buffer(request));
 
-        std::cout << "✅ Connecté à " << peer_ip << " via Tor !" << std::endl;
+        auto newSocket = std::make_shared<tcp::socket>(std::move(socket));
+        peers.push_back(newSocket);
+        requestBlockchain(newSocket);
 
+        std::cout << "✅ Connecté à " << peer_ip << " via Tor !" << std::endl;
     } catch (std::exception& e) {
         std::cerr << "❌ Erreur de connexion Tor : " << e.what() << std::endl;
     }

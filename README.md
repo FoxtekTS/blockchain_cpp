@@ -22,7 +22,12 @@
 ## **🚀 Installation & Démarrage**  
 ### **1️⃣ Prérequis**  
 📌 **Systèmes supportés :** Ubuntu / Debian / Proxmox / Termux  
-📌 **Dépendances :** C++ (g++), Boost, OpenSSL, Python3, ncurses  
+📌 **Dépendances :** C++ (g++), Boost, OpenSSL, Python3, ncurses, Tor
+
+```bash
+sudo apt update
+sudo apt install -y build-essential libboost-system-dev libssl-dev libboost-all-dev python3 libncurses5-dev tor
+```
 
 ### **2️⃣ Cloner le projet**  
 ```bash
